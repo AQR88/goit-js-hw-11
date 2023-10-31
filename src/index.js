@@ -5,7 +5,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import './sass/styles.css';
 import { service } from './js/fetch';
 import { elem } from './js/elements';
-import { createMarkup } from './js/createmarkup';
+import { renderMarkup } from './js/createmarkup';
 
 const lightbox = new SimpleLightbox('.gallery a');
 
@@ -15,10 +15,11 @@ const perPage = 40;
 const hideloadMoreBtn = () => (elem.loadMoreBtn.style.display = 'none');
 const showloadMoreBtn = () => (elem.loadMoreBtn.style.display = 'block');
 hideloadMoreBtn();
+
 async function submit(evt) {
   evt.preventDefault();
 
-  let text = elem.form.elements.searchQuery.value;
+  let text = elem.form.elements.searchQuery.value.trim();
   page = 1;
   cleanGallery();
 
@@ -31,6 +32,7 @@ async function submit(evt) {
 
   try {
     const galleryItems = await service(text, page, perPage);
+
     let totalPages = galleryItems.data.totalHits;
 
     if (galleryItems.data.hits.length === 0) {
@@ -47,7 +49,7 @@ async function submit(evt) {
       showloadMoreBtn();
       Notiflix.Notify.success(`Hooray! We found ${totalPages} image.`);
     }
-    createMarkup(galleryItems.data.hits); 
+    renderMarkup(galleryItems.data.hits); 
     lightbox.refresh();
   } catch (error) {
     console.log(error);
@@ -69,13 +71,13 @@ async function onClickBtn() {
     let showPages = galleryItems.data.totalHits / perPage;
 
     if (showPages <= page) {
-      hideBtnLoadMore();
+      hideloadMoreBtn();
       Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
     }
 
-    createMarkup(galleryItems.data.hits); 
+    renderMarkup(galleryItems.data.hits); 
   } catch (error) {
     Notiflix.Notify.failure(
       "Sorry, there are no images matching your search query. Please try again."

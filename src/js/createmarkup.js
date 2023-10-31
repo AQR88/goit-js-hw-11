@@ -1,16 +1,31 @@
+import { elem } from './elements';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
-export function createMarkup(arr){
-    return arr.map((
-        { webformatURL, 
-            largeImageURL,
-             tags,
-              likes,
-               views,
-                comments, 
-                downloads }) => `
+export function renderMarkup(img) {
+  elem.galleryDiv.insertAdjacentHTML('beforeend', createMarkup(img));
+};
+
+export function createMarkup(img) {
+  return img
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `
     <div class="photo-card">
-      <img src="${webformatURL}" alt="${tags}" class="gallery-img img"loading="lazy" />
+    <a href="${largeImageURL}">
+    <img
+    class="gallery-image img"
+    src="${webformatURL}"
+    alt="${tags}"
+    loading="lazy"
+  />
       <div class="info">
         <p class="info-item">
           <b>Likes: ${likes}</b>
@@ -26,6 +41,9 @@ export function createMarkup(arr){
         </p>
       </div>
     </div>
-    `)
-    .join('')
-    }
+    `
+    )
+    .join('');
+}
+
+
