@@ -7,14 +7,16 @@ import { service } from './js/fetch';
 import { elem } from './js/elements';
 import { renderMarkup } from './js/createmarkup';
 
-const lightbox = new SimpleLightbox('.gallery a');
-
 let page = 1;
 const perPage = 40;
 
 const hideloadMoreBtn = () => (elem.loadMoreBtn.style.display = 'none');
 const showloadMoreBtn = () => (elem.loadMoreBtn.style.display = 'block');
 hideloadMoreBtn();
+
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt', captionPosition: 'bottom', captionDelay: 200
+});
 
 async function submit(evt) {
   evt.preventDefault();
